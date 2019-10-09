@@ -22,12 +22,21 @@ void setup() {
 }
 
 void loop() {
-  motors_stop();
   delay(1000);
-  motors_left(10);
-  motors_stop();
-  delay(1000);
-  motors_right(10);
+  
+  motors_forward();
+  delay(3000);
+  motors_stop(500);
+  
+  motors_right(20);
+  motors_stop(500);
+  
+  motors_backward();
+  delay(3000);
+  motors_stop(500);
+
+  motors_left(20);
+  motors_stop(500);
 }
 
 void set_speed(int v_a, int v_b) {
@@ -35,48 +44,49 @@ void set_speed(int v_a, int v_b) {
   analogWrite(EnB, v_b);
 }
 
-void motors_stop() {
+void motors_stop(int miliseconds) {
   digitalWrite(6, LOW);
   digitalWrite(7, LOW);
   digitalWrite(8, LOW);
   digitalWrite(9, LOW);
-  delay(50);
+  delay(miliseconds);
 }
+
 
 void motors_backward() {
   digitalWrite(6, HIGH);
   digitalWrite(7, LOW);
-  digitalWrite(8, LOW);
-  digitalWrite(9, HIGH);
+  digitalWrite(8, HIGH);
+  digitalWrite(9, LOW);
 }
 
 void motors_forward() {
   digitalWrite(6, LOW);
   digitalWrite(7, HIGH);
-  digitalWrite(8, HIGH);
-  digitalWrite(9, LOW);
+  digitalWrite(8, LOW);
+  digitalWrite(9, HIGH);
 }
 
 void motors_right(int steps) {
   for(int i = 0; i < steps; i++) {
-      digitalWrite(6, LOW);
-      digitalWrite(7, HIGH);
+      digitalWrite(6, HIGH);
+      digitalWrite(7, LOW);
       digitalWrite(8, LOW);
       digitalWrite(9, HIGH);
-      delay(50);
-      motors_stop();
+      delay(300);
+      motors_stop(300);
   } 
 
 }
 
 void motors_left(int steps) {  
   for(int i = 0; i < steps; i++) {
-      digitalWrite(6, HIGH);
-      digitalWrite(7, LOW);
+      digitalWrite(6, LOW);
+      digitalWrite(7, HIGH);
       digitalWrite(8, HIGH);
       digitalWrite(9, LOW);
-      delay(50);
-      motors_stop();
+      delay(300);
+      motors_stop(300);
   }
 
 }
