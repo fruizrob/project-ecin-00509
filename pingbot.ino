@@ -11,6 +11,16 @@ void motors_right();
 void motors_left();
 void motors_backward();
 
+void test_line() {
+  delay(1000);
+
+  motors_forward(2000);
+  motors_stop(1000);
+
+  motors_right(10);
+  motors_stop(1000);  
+}
+
 void setup() {
   pinMode(in1, OUTPUT);
   pinMode(in2, OUTPUT);
@@ -22,21 +32,7 @@ void setup() {
 }
 
 void loop() {
-  delay(1000);
-  
-  motors_forward();
-  delay(3000);
-  motors_stop(500);
-  
-  motors_right(20);
-  motors_stop(500);
-  
-  motors_backward();
-  delay(3000);
-  motors_stop(500);
-
-  motors_left(20);
-  motors_stop(500);
+  test_line();
 }
 
 void set_speed(int v_a, int v_b) {
@@ -44,49 +40,51 @@ void set_speed(int v_a, int v_b) {
   analogWrite(EnB, v_b);
 }
 
-void motors_stop(int miliseconds) {
+void motors_stop(int ms) {
   digitalWrite(6, LOW);
   digitalWrite(7, LOW);
   digitalWrite(8, LOW);
   digitalWrite(9, LOW);
-  delay(miliseconds);
+  delay(ms);
 }
 
 
-void motors_backward() {
+void motors_backward(int ms) {
   digitalWrite(6, HIGH);
   digitalWrite(7, LOW);
   digitalWrite(8, HIGH);
   digitalWrite(9, LOW);
+  delay(ms);
 }
 
-void motors_forward() {
+void motors_forward(int ms) {
   digitalWrite(6, LOW);
   digitalWrite(7, HIGH);
   digitalWrite(8, LOW);
   digitalWrite(9, HIGH);
+  delay(ms);
 }
 
-void motors_right(int steps) {
+void motors_right(int steps, int ms) {
   for(int i = 0; i < steps; i++) {
       digitalWrite(6, HIGH);
       digitalWrite(7, LOW);
       digitalWrite(8, LOW);
       digitalWrite(9, HIGH);
-      delay(300);
-      motors_stop(300);
+      delay(ms);
+      motors_stop(ms);
   } 
 
 }
 
-void motors_left(int steps) {  
+void motors_left(int steps, int ms) {  
   for(int i = 0; i < steps; i++) {
       digitalWrite(6, LOW);
       digitalWrite(7, HIGH);
       digitalWrite(8, HIGH);
       digitalWrite(9, LOW);
-      delay(300);
-      motors_stop(300);
+      delay(ms);
+      motors_stop(ms);
   }
 
 }
