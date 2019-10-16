@@ -5,11 +5,13 @@ const int in3 = 8;
 const int in4 = 9;
 const int EnB = 5;  
 
-void motors_stop();
-void motors_forward();
-void motors_right();
-void motors_left();
-void motors_backward();
+void set_speed(int, int);
+void motors_stop(int);
+void motors_forward(int);
+void motors_backward(int);
+void motors_right(int, int);
+void motors_left(int, int);
+
 
 void test_line() {
   delay(1000);
@@ -17,8 +19,21 @@ void test_line() {
   motors_forward(2000);
   motors_stop(1000);
 
-  motors_right(10);
+  motors_right(10, 50); // TODO: fix steps
   motors_stop(1000);  
+}
+
+void test_step() {
+  delay(1000);
+
+  motors_right(5, 50);
+  motors_stop(1000);
+
+  motors_right(5, 100);
+  motors_stop(1000);
+
+  motors_right(1, 50);
+  motors_stop(1000);
 }
 
 void setup() {
