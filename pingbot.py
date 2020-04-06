@@ -4,7 +4,7 @@ import math
 import serial
 
 instruction = -1
-connection = serial.Serial('/dev/ttrACM0', 9600)
+connection = serial.Serial('/dev/ttyACM0', 9600)
 connection.flushInput()
 
 cap = cv2.VideoCapture(0)
