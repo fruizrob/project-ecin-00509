@@ -9,8 +9,9 @@ connection.flushInput()
 
 cap = cv2.VideoCapture(0)
 
-lowBlue = np.array([100, 100, 20], np.uint8)
-highBlue = np.array([125, 255, 255], np.uint8)
+# celeste
+lowBlue = np.array([70, 50, 50], np.uint8)
+highBlue = np.array([100, 255, 255], np.uint8)
 
 while True:
     ret, frame = cap.read()
@@ -48,19 +49,19 @@ while True:
                 connection.write(bytes('0', 'UTF-8'))
                 print("scan")
         else:
-            if x < 350 and x > 290 and proximity > 23:
+            if x < 380 and x > 260 and proximity > 23:
                 if instruction != 1:
                     instruction = 1
                     connection.write(bytes('1', 'UTF-8'))
                     print("move forward")
 
-            elif x > 350:
+            elif x > 380:
                 if instruction != 2:
                     instruction = 2
                     connection.write(bytes('2', 'UTF-8'))
                     print("move right")
 
-            elif x < 290:
+            elif x < 260:
                 if instruction != 3:
                     instruction = 3
                     connection.write(bytes('3', 'UTF-8'))
