@@ -35,7 +35,7 @@ void loop() {
 	if (Serial.available()) {
 		char option = Serial.read();
 
-		if(option != " " && option != state) {
+		if(option != ' ' && option != state) {
 			state = option;
 		}
 
@@ -44,7 +44,7 @@ void loop() {
 		switch (state) {
 			case '0':
 				motors_left(100);
-				motors_stop(1000);
+				motors_stop(200);
 				break;
 
 			case '1':
