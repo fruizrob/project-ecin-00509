@@ -13,8 +13,8 @@ cap = cv2.VideoCapture(0)
 lowBlue = np.array([80, 100, 50], np.uint8)
 highBlue = np.array([110, 255, 255], np.uint8)
 
-def update_state(new_state, instruction, validation):
-    if validation(state):
+def update_state(new_state, instruction, allowed_states):
+    if state in allowed_states:
         connection.reset_output_buffer()
         state = new_state
         connection.write(bytes(state, 'UTF-8'))
@@ -59,16 +59,16 @@ while True:
                 print ("Current State: " + str(connection.read()))
 
             if proximity == 0 and x == 0:
-                update_state('0', "scan", lambda state : state in ['9', '4'])
+                update_state('0', "scan", ['9', '4'])
             else:
                 if x < 380 and x > 260 and proximity > 26:
-                    update_state('1', "move_forward", lambda state : state in ['0', '2', '3'])
+                    update_state('1', "move_forward", ['0', '2', '3'])
                 elif x > 380:
-                    update_state('2', "move_right", lambda state : state in ['0', '1', '3'])
+                    update_state('2', "move_right", ['0', '1', '3'])
                 elif x < 260:
-                    update_state('3', "move_left", lambda state : state in ['0', '1', '2'])
+                    update_state('3', "move_left", ['0', '1', '2'])
                 elif proximity < 26:
-                    update_state('4', "collect", lambda state : state in ['1'])
+                    update_state('4', "collect", ['1'])
 
         cv2.imshow('pingbot', frame)
 
