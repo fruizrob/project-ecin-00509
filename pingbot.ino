@@ -18,7 +18,6 @@ void motors_left(int);
 
 void setup() {
 	Serial.begin(9600);
-	Serial.write("Start program");
 	servoRight.attach(13);
 	servoLeft.attach(12);
 	servoRight.write(135);
@@ -33,25 +32,19 @@ void setup() {
 }
 
 void loop() {
-	bool scan = false;
 	if (Serial.available()) {
 		char option = Serial.read();
 
 		if(option != " " && option != state) {
-			scan = false;
 			state = option;
-		} else if (option == 0 && state == 0) {
-			scan = true;
 		}
 
 		Serial.write(state);
 
 		switch (state) {
 			case '0':
-				if(scan) {
-					motors_left(100);
-					motors_stop(1000);
-				}
+				motors_left(100);
+				motors_stop(1000);
 				break;
 
 			case '1':

@@ -46,38 +46,45 @@ while True:
                 cv2.drawContours(frame, [newContour], 0, (255, 0, 0), 3)
 
         if cont%10 == 0:
-            # if connection.in_wating:
-            #     print (connection.read())
+            
+            if connection.in_waiting:
+                print ("Current State: " + connection.read())
 
             if proximity == 0 and x == 0:
-                connection.write(bytes('0', 'UTF-8'))
-                if(instruction != 0):
+                if instruction > 3:
+                    connection.reset_output_buffer()
                     instruction = 0
                     print("scan")
+                if instruction == 0:
+                    connection.write(bytes('0', 'UTF-8'))
             else:
                 if x < 380 and x > 260 and proximity > 23:
-                    connection.write(bytes('1', 'UTF-8'))
                     if instruction != 1:
+                        connection.reset_output_buffer()
                         instruction = 1
                         print("move forward")
+                    connection.write(bytes('1', 'UTF-8'))
 
                 elif x > 380:
-                    connection.write(bytes('2', 'UTF-8'))
                     if instruction != 2:
+                        connection.reset_output_buffer()
                         instruction = 2
                         print("move right")
+                    connection.write(bytes('2', 'UTF-8'))
 
                 elif x < 260:
-                    connection.write(bytes('3', 'UTF-8'))
                     if instruction != 3:
+                        connection.reset_output_buffer()
                         instruction = 3
                         print("move left")
+                    connection.write(bytes('3', 'UTF-8'))
 
                 elif proximity < 23:
-                    connection.write(bytes('4', 'UTF-8'))
                     if instruction != 4:
+                        connection.reset_output_buffer()
                         instruction = 4
                         print("collect")
+                    connection.write(bytes('4', 'UTF-8'))
 
         cv2.imshow('pingbot', frame)
 
