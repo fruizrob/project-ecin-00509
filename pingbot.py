@@ -48,7 +48,7 @@ while True:
         if cont%10 == 0:
 
             if connection.in_waiting:
-                print ("Current State: " + connection.read())
+                print ("Current State: " + str(connection.read()))
 
             if proximity == 0 and x == 0:
                 if instruction > 3:
