@@ -3,7 +3,7 @@ import numpy as np
 import math  
 import serial
 
-instruction = -1
+instruction = 9
 connection = serial.Serial('/dev/ttyACM0', 9600)
 connection.flushInput()
 
@@ -46,7 +46,7 @@ while True:
                 cv2.drawContours(frame, [newContour], 0, (255, 0, 0), 3)
 
         if cont%10 == 0:
-            
+
             if connection.in_waiting:
                 print ("Current State: " + connection.read())
 
