@@ -49,23 +49,23 @@ void loop() {
 		switch (state) {
 			case '0':
 				if(scan) {
-					motors_left(100)
+					motors_left(100);
 					motors_stop(1000);
 				}
 				break;
 
 			case '1':
-				move_forward(150);
+				motors_forward(150);
 				motors_stop(200);
 				break;
 
 			case '2':
-				move_right(40);
+				motors_right(40);
 				motors_stop(200);
 				break;
 
 			case '3':
-				move_left(40);
+				motors_left(40);
 				motors_stop(200);
 				break;
 
