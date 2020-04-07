@@ -3,7 +3,7 @@ import numpy as np
 import math  
 import serial
 
-instruction = 9
+state = 9
 connection = serial.Serial('/dev/ttyACM0', 9600)
 connection.flushInput()
 
@@ -12,6 +12,15 @@ cap = cv2.VideoCapture(0)
 # celeste
 lowBlue = np.array([80, 100, 50], np.uint8)
 highBlue = np.array([110, 255, 255], np.uint8)
+
+def update_state(new_state, instruction, validation):
+    if validation(state):
+        connection.reset_output_buffer()
+        state = new_state
+        connection.write(bytes(state, 'UTF-8'))
+        print (instruction)
+    else:
+        print ("state not allowed")
 
 cont = 0
 while True:
@@ -31,7 +40,7 @@ while True:
         for c in contours:
             area = cv2.contourArea(c)
             height = 2*math.sqrt(area/math.pi) #sqrt solo en cuadrados, calcular diferente en pelota (para obtener el alto de la pelota, r*2)
-            if area > 800:
+            if area > 600:
                 M = cv2.moments(c)
                 if(M["m00"] == 0): M["m00"]=1
                 x = int(M["m10"]/M["m00"])
@@ -46,45 +55,20 @@ while True:
                 cv2.drawContours(frame, [newContour], 0, (255, 0, 0), 3)
 
         if cont%10 == 0:
-
             if connection.in_waiting:
                 print ("Current State: " + str(connection.read()))
 
             if proximity == 0 and x == 0:
-                if instruction > 3:
-                    connection.reset_output_buffer()
-                    instruction = 0
-                    print("scan")
-                if instruction == 0:
-                    connection.write(bytes('0', 'UTF-8'))
+                update_state('0', "scan", lambda state : state in ['9', '4'])
             else:
-                if x < 380 and x > 260 and proximity > 23:
-                    if instruction != 1:
-                        connection.reset_output_buffer()
-                        instruction = 1
-                        print("move forward")
-                    connection.write(bytes('1', 'UTF-8'))
-
+                if x < 380 and x > 260 and proximity > 26:
+                    update_state('1', "move_forward", lambda state : state in ['0', '2', '3'])
                 elif x > 380:
-                    if instruction != 2:
-                        connection.reset_output_buffer()
-                        instruction = 2
-                        print("move right")
-                    connection.write(bytes('2', 'UTF-8'))
-
+                    update_state('2', "move_right", lambda state : state in ['0', '1', '3'])
                 elif x < 260:
-                    if instruction != 3:
-                        connection.reset_output_buffer()
-                        instruction = 3
-                        print("move left")
-                    connection.write(bytes('3', 'UTF-8'))
-
-                elif proximity < 23:
-                    if instruction != 4:
-                        connection.reset_output_buffer()
-                        instruction = 4
-                        print("collect")
-                    connection.write(bytes('4', 'UTF-8'))
+                    update_state('3', "move_left", lambda state : state in ['0', '1', '2'])
+                elif proximity < 26:
+                    update_state('4', "collect", lambda state : state in ['1'])
 
         cv2.imshow('pingbot', frame)
 

@@ -7,7 +7,7 @@ const int EnA = 10;
 const int in3 = 8;
 const int in4 = 9;
 const int EnB = 5;
-char state;
+char state = 9;
 
 void set_speed(int, int);
 void motors_stop(int);
@@ -32,43 +32,43 @@ void setup() {
 }
 
 void loop() {
-	if (Serial.available()) {
-		char option = Serial.read();
+	if(Serial.available()) {
+		state = Serial.read();
+	}
 
-		if(option != ' ' && option != state) {
-			state = option;
-		}
+	Serial.write(state)
 
-		Serial.write(state);
+	switch (state) {
+		case '0':
+			motors_left(100);
+			motors_stop(200);
+			break;
 
-		switch (state) {
-			case '0':
-				motors_left(100);
-				motors_stop(200);
-				break;
+		case '1':
+			motors_forward(150);
+			motors_stop(200);
+			break;
 
-			case '1':
-				motors_forward(150);
-				motors_stop(200);
-				break;
+		case '2':
+			motors_right(40);
+			motors_stop(200);
+			break;
 
-			case '2':
-				motors_right(40);
-				motors_stop(200);
-				break;
+		case '3':
+			motors_left(40);
+			motors_stop(200);
+			break;
 
-			case '3':
-				motors_left(40);
-				motors_stop(200);
-				break;
+		case '4':
+			capture();
+			break;
 
-			case '4':
-				capture();
-				break;
+		case '9':
+			motors_stop(100);
+			break;
 
-			default:
-				break;
-		}
+		default:
+			break;
 	}
 }
 
@@ -117,7 +117,27 @@ void motors_left(int ms) {
 	delay(ms);
 }
 
-void capture() {
+void drop() {
+	// open claws
 	servoRight.write(90);
 	servoLeft.write(135);
+
+	motors_stop(100);
+	motors_backward(300);
+	motors_stop(10000); // TODO correct way to end
+}
+
+void capture() {
+	// open claws
+	servoRight.write(90);
+	servoLeft.write(135);
+	
+	motors_stop(100);
+	motors_forward(250);
+	motors_right(60); // fix unestable move
+	motors_stop(100);
+
+	// close claws
+	servoRight.write(135);
+	servoLeft.write(90);
 }
