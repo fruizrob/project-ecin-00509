@@ -36,7 +36,7 @@ void loop() {
 		state = Serial.read();
 	}
 
-	Serial.write(state)
+	Serial.write(state);
 
 	switch (state) {
 		case '0':
